@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Vault Manager',
+      title: 'Almacen de claves',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         const Icon(Icons.security, size: 80, color: Colors.blueAccent),
         const SizedBox(height: 20),
-        const Text('Vault Manager', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+        const Text('Almacen de Claves', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
         const Text('Introduce tu PIN para desbloquear la bóveda', style: TextStyle(color: Colors.grey)),
         const SizedBox(height: 30),
@@ -267,7 +267,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (_currentIndex == 0) {
+      // 🔒 MUNDO PERSONAL (LOCAL)
       if (_personalEnEdicion != null) {
+        // Primero eliminamos la credencial con el ID viejo para evitar duplicados
+        await _storageService.eliminarCredencial(_personalEnEdicion!.id);
+        
+        // Creamos la actualizada manteniendo el mismo ID original
         final credencialActualizada = CredentialModel(
           id: _personalEnEdicion!.id,
           sitio: _sitioController.text,
@@ -277,6 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         await _storageService.guardarCredencial(credencialActualizada);
       } else {
+        // CREAR NUEVO (Caso normal)
         final nuevaCredencial = CredentialModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           sitio: _sitioController.text,
@@ -288,7 +294,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       _cargarClavesPersonales();
     } else {
+      // 🌐 MUNDO GLOBAL (SERVIDOR LINUX)
       if (_globalEnEdicion != null) {
+        // ACTUALIZAR EXISTENTE
         final globalActualizada = GlobalCredentialModel(
           id: _globalEnEdicion!.id,
           sitio: _sitioController.text,
@@ -305,6 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
       } else {
+        // CREAR NUEVO
         final nuevaGlobal = GlobalCredentialModel(
           sitio: _sitioController.text,
           url: _urlController.text,
@@ -544,7 +553,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentIndex == 0 ? 'Vault Manager - Personal' : 'Vault Manager - Servidor Local'),
+        title: Text(_currentIndex == 0 ? 'Almacen - Personal' : 'Almacen - Servidor Local'),
         elevation: 0,
         actions: [
           if (_currentIndex == 1)
