@@ -53,4 +53,17 @@ class StorageService {
     await _secureStorage.write(key: _storageKey, value: jsonString);
   }
 
+  // Llave única para aislar el PIN dentro del almacenamiento encriptado
+  static const _keyPinMaestro = 'user_pin_maestro';
+
+  // 1. Guarda el nuevo PIN ingresado por el usuario
+  Future<void> guardarPinMaestro(String pin) async {
+    await _secureStorage.write(key: _keyPinMaestro, value: pin);
+  }
+
+  // 2. Recupera el PIN guardado en el hardware del dispositivo
+  Future<String?> obtenerPinMaestro() async {
+    return await _secureStorage.read(key: _keyPinMaestro);
+  }
+
 }
