@@ -1,6 +1,12 @@
-# gestor
+# Gestor
 
-A new Flutter project.
+Proyecto usando tecnologia Flutter para compilacion windows y apk.
+
+Este proyecto esta diseñado para un almacenador de claves tanto personales como institucionales
+
+Para institucion se debe de crear un servidor para cargar un Docker y una base de datos para que se pueda compartir las claves en el equipo que se necesite
+
+Proyecto hecho con parte de IA a la escritura de codigo unicamente
 
 ## Getting Started
 
